@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ardanlabs/blockchain/foundation/web"
+	"github.com/bruno-sartori/go-blockchain/foundation/web"
 	"go.uber.org/zap"
 )
 

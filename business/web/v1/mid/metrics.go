@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ardanlabs/blockchain/business/web/metrics"
-	"github.com/ardanlabs/blockchain/foundation/web"
+	"github.com/bruno-sartori/go-blockchain/business/web/metrics"
+	"github.com/bruno-sartori/go-blockchain/foundation/web"
 )
 
 // Metrics updates program counters.

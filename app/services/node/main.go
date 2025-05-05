@@ -10,9 +10,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ardanlabs/blockchain/app/services/node/handlers"
-	"github.com/ardanlabs/blockchain/foundation/logger"
 	"github.com/ardanlabs/conf/v3"
+	"github.com/bruno-sartori/go-blockchain/app/services/node/handlers"
+	"github.com/bruno-sartori/go-blockchain/foundation/logger"
 	"go.uber.org/zap"
 )
 

@@ -5,9 +5,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/ardanlabs/blockchain/business/sys/validate"
-	v1Web "github.com/ardanlabs/blockchain/business/web/v1"
-	"github.com/ardanlabs/blockchain/foundation/web"
+	"github.com/bruno-sartori/go-blockchain/business/sys/validate"
+	v1Web "github.com/bruno-sartori/go-blockchain/business/web/v1"
+	"github.com/bruno-sartori/go-blockchain/foundation/web"
 	"go.uber.org/zap"
 )
 

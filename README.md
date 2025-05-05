@@ -1,7 +1,7 @@
 # Ultimate Go: Advanced Engineering - Template
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/ardanlabs/blockchain)](https://goreportcard.com/report/github.com/ardanlabs/blockchain)
-[![go.mod Go version](https://img.shields.io/github/go-mod/go-version/ardanlabs/blockchain)](https://github.com/ardanlabs/blockchain)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bruno-sartori/go-blockchain)](https://goreportcard.com/report/github.com/bruno-sartori/go-blockchain)
+[![go.mod Go version](https://img.shields.io/github/go-mod/go-version/ardanlabs/blockchain)](https://github.com/bruno-sartori/go-blockchain)
 
 Copyright 2021, 2022, Ardan Labs  
 hello@ardanlabs.com
@@ -10,7 +10,7 @@ hello@ardanlabs.com
 
 This class teaches you how to build a semantically correct blockchain in Go. The implementation of the Ardan blockchain takes inspiration from both Bitcoin and Ethereum. The class is a mix of lecture and coding. During the class you will learn the different aspects of blockchain technology and pair program with the instructor as you build this code base from scratch.
 
-Please look at the [wiki](https://github.com/ardanlabs/blockchain/wiki) for more details.
+Please look at the [wiki](https://github.com/bruno-sartori/go-blockchain/wiki) for more details.
 
 ## Licensing
 
@@ -40,13 +40,13 @@ https://www.ardanlabs.com/training
 
 ## Index
 
-* [Purchase Video](https://github.com/ardanlabs/blockchain#purchase-video)
-* [Experience](https://github.com/ardanlabs/blockchain#our-experience)
-* [Teacher](https://github.com/ardanlabs/blockchain#our-teacher)
-* [More About Go](https://github.com/ardanlabs/blockchain#more-about-go)
-* [Minimal Qualified Student](https://github.com/ardanlabs/blockchain#minimal-qualified-student)
-* [Important Reading](https://github.com/ardanlabs/blockchain#important-reading)
-* [Before You Come To Class](https://github.com/ardanlabs/blockchain#before-you-come-to-class)
+* [Purchase Video](https://github.com/bruno-sartori/go-blockchain#purchase-video)
+* [Experience](https://github.com/bruno-sartori/go-blockchain#our-experience)
+* [Teacher](https://github.com/bruno-sartori/go-blockchain#our-teacher)
+* [More About Go](https://github.com/bruno-sartori/go-blockchain#more-about-go)
+* [Minimal Qualified Student](https://github.com/bruno-sartori/go-blockchain#minimal-qualified-student)
+* [Important Reading](https://github.com/bruno-sartori/go-blockchain#important-reading)
+* [Before You Come To Class](https://github.com/bruno-sartori/go-blockchain#before-you-come-to-class)
 
 ## Purchase Video
 
@@ -188,7 +188,7 @@ While many of the examples can be done using the online playground (http://play.
 $ cd $HOME
 $ mkdir code
 $ cd code
-$ git clone https://github.com/ardanlabs/blockchain
+$ git clone https://github.com/bruno-sartori/go-blockchain
 $ cd blockchain
 ```
 

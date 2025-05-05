@@ -8,10 +8,10 @@ import (
 	"net/http/pprof"
 	"os"
 
-	"github.com/ardanlabs/blockchain/app/services/node/handlers/debug/checkgrp"
-	v1 "github.com/ardanlabs/blockchain/app/services/node/handlers/v1"
-	"github.com/ardanlabs/blockchain/business/web/v1/mid"
-	"github.com/ardanlabs/blockchain/foundation/web"
+	"github.com/bruno-sartori/go-blockchain/app/services/node/handlers/debug/checkgrp"
+	v1 "github.com/bruno-sartori/go-blockchain/app/services/node/handlers/v1"
+	"github.com/bruno-sartori/go-blockchain/business/web/v1/mid"
+	"github.com/bruno-sartori/go-blockchain/foundation/web"
 	"go.uber.org/zap"
 )
 

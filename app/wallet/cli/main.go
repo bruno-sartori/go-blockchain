@@ -1,6 +1,6 @@
 package main
 
-import "github.com/ardanlabs/blockchain/app/wallet/cli/cmd"
+import "github.com/bruno-sartori/go-blockchain/app/wallet/cli/cmd"
 
 func main() {
 	cmd.Execute()

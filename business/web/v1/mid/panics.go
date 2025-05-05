@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/ardanlabs/blockchain/business/web/metrics"
-	"github.com/ardanlabs/blockchain/foundation/web"
+	"github.com/bruno-sartori/go-blockchain/business/web/metrics"
+	"github.com/bruno-sartori/go-blockchain/foundation/web"
 )
 
 // Panics recovers from panics and converts the panic to an error so it is

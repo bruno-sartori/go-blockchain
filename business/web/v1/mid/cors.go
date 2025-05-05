@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ardanlabs/blockchain/foundation/web"
+	"github.com/bruno-sartori/go-blockchain/foundation/web"
 )
 
 // Cors sets the response headers needed for Cross-Origin Resource Sharing

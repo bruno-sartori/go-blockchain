@@ -1,4 +1,4 @@
-module github.com/ardanlabs/blockchain
+module github.com/bruno-sartori/go-blockchain
 
 go 1.18
 
