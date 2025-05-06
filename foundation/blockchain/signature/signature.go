@@ -3,6 +3,7 @@ package signature
 import (
 	"crypto/ecdsa"
 	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -29,6 +30,27 @@ func Hash(value any) string {
 	return hexutil.Encode(hash[:])
 }
 
+func SignatureString(v, r, s *big.Int) string {
+	return hexutil.Encode(ToSignatureBytesWithSartoriCoinID(v, r, s))
+}
+
+// converts a hex reprersentation of the signature into
+// its R, S and V parts.
+func ToVRSFromHexSignature(sigStr string) (v, r, s *big.Int, err error) {
+	sig, err := hex.DecodeString(sigStr[2:])
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	r = big.NewInt(0).SetBytes(sig[:32])
+	s = big.NewInt(0).SetBytes(sig[32:64])
+	v = big.NewInt(0).SetBytes([]byte{sig[64]})
+
+	return v, r, s, nil
+}
+
+// converts the r, s, v values into a slice fo bytes
+// with the removal f the sartoriCoinID.
 func ToSignatureBytes(v, r, s *big.Int) []byte {
 	sig := make([]byte, crypto.SignatureLength)
 
@@ -145,8 +167,4 @@ func FromAddress(value any, v, r, s *big.Int) (string, error) {
 
 	// Extract the account address from the public key.
 	return crypto.PubkeyToAddress(*publicKey).String(), nil
-}
-
-func SignatureString(v, r, s *big.Int) string {
-	return hexutil.Encode(ToSignatureBytesWithSartoriCoinID(v, r, s))
 }
