@@ -2,77 +2,18 @@ package signature
 
 import (
 	"crypto/ecdsa"
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 )
-
-const ZeroHash string = "0x0000000000000000000000000000000000000000000000000000000000000000"
 
 // sartoriCoinID is an arbitrary number for signing messages. This will make it
 // clear that the signature comes for the Sartori blockchain.
 // Ethereum and Bitcoin do this as well, but they use the value of 27.
 const sartoriCoinID = 29
-
-func Hash(value any) string {
-	data, err := json.Marshal(value)
-	if err != nil {
-		return ZeroHash
-	}
-
-	hash := sha256.Sum256(data)
-	return hexutil.Encode(hash[:])
-}
-
-func SignatureString(v, r, s *big.Int) string {
-	return hexutil.Encode(ToSignatureBytesWithSartoriCoinID(v, r, s))
-}
-
-// converts a hex reprersentation of the signature into
-// its R, S and V parts.
-func ToVRSFromHexSignature(sigStr string) (v, r, s *big.Int, err error) {
-	sig, err := hex.DecodeString(sigStr[2:])
-	if err != nil {
-		return nil, nil, nil, err
-	}
-
-	r = big.NewInt(0).SetBytes(sig[:32])
-	s = big.NewInt(0).SetBytes(sig[32:64])
-	v = big.NewInt(0).SetBytes([]byte{sig[64]})
-
-	return v, r, s, nil
-}
-
-// converts the r, s, v values into a slice fo bytes
-// with the removal f the sartoriCoinID.
-func ToSignatureBytes(v, r, s *big.Int) []byte {
-	sig := make([]byte, crypto.SignatureLength)
-
-	rBytes := make([]byte, 32)
-	r.FillBytes(rBytes)
-	copy(sig, rBytes)
-
-	sBytes := make([]byte, 32)
-	s.FillBytes(sBytes)
-	copy(sig[32:], sBytes)
-
-	sig[64] = byte(v.Uint64() - sartoriCoinID)
-
-	return sig
-}
-
-func ToSignatureBytesWithSartoriCoinID(v, r, s *big.Int) []byte {
-	sig := ToSignatureBytes(v, r, s)
-	sig[64] = byte(v.Uint64())
-
-	return sig
-}
 
 // Returns a hash of 32 bytes that represents this data with
 // the salt embedded into the final hash
@@ -101,6 +42,7 @@ func toSignatureValues(sig []byte) (v, r, s *big.Int) {
 	return v, r, s
 }
 
+// Uses the specified private key to sign the transaction.
 func Sign(value any, privateKey *ecdsa.PrivateKey) (v, r, s *big.Int, err error) {
 	// Prepare the data for signing.
 	data, err := salt(value)
@@ -133,38 +75,4 @@ func Sign(value any, privateKey *ecdsa.PrivateKey) (v, r, s *big.Int, err error)
 	v, r, s = toSignatureValues(sig)
 
 	return v, r, s, nil
-}
-
-func VerifySignature(v, r, s *big.Int) error {
-	// Check the recovery id is either 0 or 1
-	uintV := v.Uint64() - sartoriCoinID
-	if uintV != 0 && uintV != 1 {
-		return errors.New("invalid recover id")
-	}
-
-	if !crypto.ValidateSignatureValues(byte(uintV), r, s, false) {
-		return errors.New("invalid signature values")
-	}
-
-	return nil
-}
-
-func FromAddress(value any, v, r, s *big.Int) (string, error) {
-	// Prepare the data for public key extraction
-	data, err := salt(value)
-	if err != nil {
-		return "", err
-	}
-
-	// Convert the [R|S|V] format into the riginal 65 bytes
-	sig := ToSignatureBytes(v, r, s)
-
-	// Capture the public key assoociated with this data and signature
-	publicKey, err := crypto.SigToPub(data, sig)
-	if err != nil {
-		return "", err
-	}
-
-	// Extract the account address from the public key.
-	return crypto.PubkeyToAddress(*publicKey).String(), nil
 }
