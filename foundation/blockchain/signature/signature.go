@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math/big"
 
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
@@ -75,4 +76,70 @@ func Sign(value any, privateKey *ecdsa.PrivateKey) (v, r, s *big.Int, err error)
 	v, r, s = toSignatureValues(sig)
 
 	return v, r, s, nil
+}
+
+// Verifies if the signature conforms to our standards.
+func VerifySignature(v, r, s *big.Int) error {
+	// Check the recovery id is either 0 or 1
+	uintV := v.Uint64() - sartoriCoinID
+	if uintV != 0 && uintV != 1 {
+		return errors.New("invalid recover id")
+	}
+
+	if !crypto.ValidateSignatureValues(byte(uintV), r, s, false) {
+		return errors.New("invalid signature values")
+	}
+
+	return nil
+}
+
+// converts the r, s, v values into a slice fo bytes
+// with the removal f the sartoriCoinID.
+func ToSignatureBytes(v, r, s *big.Int) []byte {
+	sig := make([]byte, crypto.SignatureLength)
+
+	rBytes := make([]byte, 32)
+	r.FillBytes(rBytes)
+	copy(sig, rBytes)
+
+	sBytes := make([]byte, 32)
+	s.FillBytes(sBytes)
+	copy(sig[32:], sBytes)
+
+	sig[64] = byte(v.Uint64() - sartoriCoinID)
+
+	return sig
+}
+
+func FromAddress(value any, v, r, s *big.Int) (string, error) {
+	// Prepare the data for public key extraction
+	data, err := salt(value)
+	if err != nil {
+		return "", err
+	}
+
+	// Convert the [R|S|V] format into the riginal 65 bytes
+	sig := ToSignatureBytes(v, r, s)
+
+	// Capture the public key assoociated with this data and signature
+	publicKey, err := crypto.SigToPub(data, sig)
+	if err != nil {
+		return "", err
+	}
+
+	// Extract the account address from the public key.
+	return crypto.PubkeyToAddress(*publicKey).String(), nil
+}
+
+// Converts the r, s ,v values into a slice of bytes keeping the SartoriCoinID.
+func ToSignatureBytesWithSartoriCoinID(v, r, s *big.Int) []byte {
+	sig := ToSignatureBytes(v, r, s)
+	sig[64] = byte(v.Uint64())
+
+	return sig
+}
+
+// RReturns the signature as a string
+func SignatureString(v, r, s *big.Int) string {
+	return hexutil.Encode(ToSignatureBytesWithSartoriCoinID(v, r, s))
 }

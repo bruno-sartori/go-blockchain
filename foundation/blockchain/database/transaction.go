@@ -3,6 +3,7 @@ package database
 import (
 	"crypto/ecdsa"
 	"errors"
+	"fmt"
 	"math/big"
 
 	"github.com/bruno-sartori/go-blockchain/foundation/blockchain/signature"
@@ -70,4 +71,50 @@ type SignedTx struct {
 	V *big.Int `json:"v"` // Ethereum: Recover identifier, either 29 or 30 with an sartoriCoinID.
 	R *big.Int `json:"r"` // Ethereum: First coordinate of the ECDSA signature.
 	S *big.Int `json:"s"` // Ethereum: Second coordinate of the ECDSA signature.
+}
+
+// Verifies if the transaction has a proper signature that conforms to our standards.
+// It also checks if the frm field matches the account that signed the transaction.
+// Last it checks the format of the from and to fields.
+func (tx SignedTx) Validate(chainID uint16) error {
+	if tx.ChainID != chainID {
+		return fmt.Errorf("invalid chain id, got[%d] exp[%d]", tx.ChainID, chainID)
+	}
+
+	if !tx.FromID.IsAccountID() {
+		return errors.New("from account is not properly formatted")
+	}
+
+	if !tx.ToID.IsAccountID() {
+		return errors.New("to account is not properly formatted")
+	}
+
+	if tx.FromID == tx.ToID {
+		return fmt.Errorf("transaction invalid, sending money to yourself, from %s to %s", tx.FromID, tx.ToID)
+	}
+
+	if err := signature.VerifySignature(tx.V, tx.R, tx.S); err != nil {
+		return err
+	}
+
+	address, err := signature.FromAddress(tx.Tx, tx.V, tx.R, tx.S)
+	if err != nil {
+		return err
+	}
+
+	if address != string(tx.FromID) {
+		return errors.New("signature address doesn't match from address")
+	}
+
+	return nil
+}
+
+// Returns the signature as a string
+func (tx SignedTx) SignatureString() string {
+	return signature.SignatureString(tx.V, tx.R, tx.S)
+}
+
+// Implements the Stringer interface for logging
+func (tx SignedTx) String() string {
+	return fmt.Sprintf("%s:%d", tx.FromID, tx.Nonce)
 }
